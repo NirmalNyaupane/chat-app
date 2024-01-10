@@ -5,4 +5,10 @@ enum MediaType {
   Video = "VIDEO",
 }
 
-export {MediaType}
+enum OTPType{
+  EmailVerify="EMAIL_VERIFY",
+  ResendOtp = "RESEND_OTP",
+  ResetPassword="RESET_PASSWORD"
+}
+
+export {MediaType, OTPType}

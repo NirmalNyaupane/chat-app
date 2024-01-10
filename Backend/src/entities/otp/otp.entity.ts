@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -8,8 +9,7 @@ import {
 } from "typeorm";
 import { CommonEntity } from "..";
 import { UserEntity } from "../user/user.entity";
-import EnvConfiguration from "../../config/env.config";
-import bcrypt from "bcrypt";
+import { OTPType } from "../../constants";
 
 @Entity("otp")
 export class OtpEntity extends CommonEntity {
@@ -28,6 +28,9 @@ export class OtpEntity extends CommonEntity {
 
   @Column({ type: "timestamp" })
   expiryDate: Date;
+
+  @Column({type:"enum", enum:OTPType, nullable:false})
+  otpType:OTPType
 
   @OneToOne(() => UserEntity)
   @JoinColumn()

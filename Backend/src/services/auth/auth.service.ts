@@ -27,6 +27,11 @@ class AuthService {
     );
     return updateResponse;
   }
+
+  async resetPassword(id:string, newPassword:string){
+      const updatedResponse = await UserEntity.update({id:id},{password:newPassword})
+      return updatedResponse;
+  }
 }
 
 export default new AuthService();

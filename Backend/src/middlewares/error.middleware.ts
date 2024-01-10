@@ -9,7 +9,7 @@ const errorHandler = async (
   next: NextFunction
 ) => {
   let error = err;
-  console.log(error);
+  // console.log(error);
   if (!(error instanceof ApiError)) {
     const statusCode = error?.statusCode ?? 500;
     const message = error?.message ?? "Something went wrong";

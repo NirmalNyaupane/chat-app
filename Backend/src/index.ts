@@ -5,12 +5,12 @@ import mediaRouter from './routes/media.routes';
 const app = express();
 
 /*************** globals middlewares *****************************/
-import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import cookieParser from "cookie-parser";
-import errorHandler from "./middlewares/error.middleware";
+import helmet from "helmet";
 import EnvConfiguration from "./config/env.config";
+import errorHandler from "./middlewares/error.middleware";
 import authRouter from './routes/auth.routes';
 
 app.use(express.json({ limit: "16kb" }));
@@ -40,7 +40,4 @@ AppDataSource.initialize().then(() => {
   app.listen(EnvConfiguration.PORT, () => {
     console.log(`Server started at port ${EnvConfiguration.PORT}`);
   });
-});
-app.listen(4000, () => {
-  console.log("hello world");
 });

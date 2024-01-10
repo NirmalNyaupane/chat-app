@@ -1,3 +1,4 @@
+import { OTPType } from "../../constants";
 import { OtpEntity } from "../../entities/otp/otp.entity";
 import { UserEntity } from "../../entities/user/user.entity";
 
@@ -7,11 +8,28 @@ class OtpService {
     return response;
   }
 
-  insert = async (otp: string, user: UserEntity) => {
+  insert = async (otp: string, user: UserEntity, otpType: OTPType, expiryTime: string | number) => {
+
+    //check otp of user is exits or not
+    //if otp exit destroy the otp
+    const checkOtp = await OtpEntity.createQueryBuilder("otp")
+      .leftJoin("otp.user", "user")
+      .select(["otp.otp","otp.id"])
+      .where("user.email=:email", {
+        email: user.email,
+      })
+      .getOne();
+
+      console.log(checkOtp);
+    if (checkOtp) {
+      await OtpEntity.delete({ id: checkOtp.id });
+    }
+
     const otpObj = new OtpEntity();
     otpObj.otp = otp;
     otpObj.user = user;
-    otpObj.expiryDate = new Date(Date.now() + 1000 * 60);
+    otpObj.expiryDate = new Date(expiryTime);
+    otpObj.otpType = otpType;
     return await OtpEntity.save(otpObj);
   };
 
