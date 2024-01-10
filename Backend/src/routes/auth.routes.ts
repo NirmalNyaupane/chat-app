@@ -5,6 +5,7 @@ import {
   EmailVerificationValidatior,
   InitializePasswordResetValidator,
   FinalizePasswordResetValidator,
+  LoginValidator
 } from "../validators/auth.validator";
 import authController from "../controllers/auth.controller";
 const router = Router();
@@ -22,7 +23,7 @@ router
     authController.emailVerification
   );
 
-  router.route('/resend-otp').post(requestBodyValidator(InitializePasswordResetValidator), authController.resendOtp)
+router.route('/resend-otp').post(requestBodyValidator(InitializePasswordResetValidator), authController.resendOtp)
 
 router
   .route("/initialize-password-reset")
@@ -31,5 +32,5 @@ router
     authController.initializePassordReset
   );
 router.route("/finalize-password-reset").post(requestBodyValidator(FinalizePasswordResetValidator), authController.finalizePasswordReset)
-
+router.route("/login").post(requestBodyValidator(LoginValidator), authController.login)
 export default router;

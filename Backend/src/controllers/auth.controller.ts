@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { OTPType } from "../constants";
 import authService from "../services/auth/auth.service";
 import commonService from "../services/common.service";
 import otpService from "../services/otp/otp.service";
@@ -6,7 +7,7 @@ import ApiError from "../utils/ApiError";
 import asyncHandler from "../utils/AsyncHandler";
 import SendMail from "../utils/SendingMail";
 import { isHashValueCorrect, otpGenerator } from "../utils/helper";
-import { OTPType } from "../constants";
+import { generateAccessToken } from "../utils/accessToken";
 
 class AuthController {
 
@@ -183,6 +184,29 @@ class AuthController {
     } else {
       throw new ApiError(500, "Internal server error");
     }
+  })
+
+
+  login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const user = await commonService.emailIsRegisterOrNot(req.body.email);
+    console.log(user);
+    if (!user) {
+      throw new ApiError(400, "Email is not registered")
+    }
+
+    //check password
+    const isPasswordCorrect = await isHashValueCorrect(user.password, req.body.password)
+    if (!isPasswordCorrect) {
+      throw new ApiError(400, "Invalid credentials")
+    }
+    const jwt = generateAccessToken(user.id);
+    const reponse = {
+      id:user.id,
+      isVerified:user.isVerified,
+      accessToken:jwt
+    }
+
+    return res.status(200).json(reponse);
   })
 }
 export default new AuthController();

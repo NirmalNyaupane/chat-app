@@ -17,6 +17,10 @@ class EnvConfiguration {
   static SMTP_PORT = +(process.env.SMTP_PORT ?? 0);
   static SMTP_PASS = process.env.SMTP_PASS ?? "";
   static SMTP_USER = process.env.SMTP_USER ?? "";
+
+  //acces token variables 
+  static ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+  static ACCESS_TOKEN_EXPIRY = process.env.ACCESS_TOKEN_EXPIRY;
 }
 
 export default EnvConfiguration;

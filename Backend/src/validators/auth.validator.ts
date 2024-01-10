@@ -50,9 +50,20 @@ class FinalizePasswordResetValidator {
   @IsStrongPassword()
   newPassword: string;
 }
+
+class LoginValidator{
+  @IsNotEmpty()
+  @IsEmail()
+  email:string;
+
+  @IsNotEmpty()
+  @IsStrongPassword()
+  password:string;
+}
 export {
   EmailVerificationValidatior,
   InitializePasswordResetValidator,
   RegisterUserValidation,
-  FinalizePasswordResetValidator
+  FinalizePasswordResetValidator,
+  LoginValidator
 };
