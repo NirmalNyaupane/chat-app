@@ -23,14 +23,16 @@ class AuthService {
   async verifyEmail(id: string) {
     const updateResponse = await UserEntity.update(
       { id: id },
-      {isVerified:true}
+      { isVerified: true }
     );
     return updateResponse;
   }
 
-  async resetPassword(id:string, newPassword:string){
-      const updatedResponse = await UserEntity.update({id:id},{password:newPassword})
-      return updatedResponse;
+  async resetPassword(user: UserEntity, newPassword: string) {
+    user.password = newPassword;
+    const response =  await UserEntity.save(user);
+    const{password, ...remainingInfo} = response;
+    return remainingInfo;
   }
 }
 

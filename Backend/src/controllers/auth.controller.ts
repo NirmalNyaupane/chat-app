@@ -176,11 +176,11 @@ class AuthController {
       throw new ApiError(400, "Invalid otp");
     }
 
-    const updateResponse = await authService.resetPassword(user.id, req.body.newPassword);
-    if (updateResponse.affected === 1) {
+    const updateResponse = await authService.resetPassword(user, req.body.newPassword);
+    if (updateResponse) {
       return res
         .status(200)
-        .json({ message: "Password changed" });
+        .json({ message: "Password changed sucessfully", data: updateResponse });
     } else {
       throw new ApiError(500, "Internal server error");
     }
@@ -200,9 +200,9 @@ class AuthController {
     }
     const jwt = generateAccessToken(user.id);
     const reponse = {
-      id:user.id,
-      isVerified:user.isVerified,
-      accessToken:jwt
+      id: user.id,
+      isVerified: user.isVerified,
+      accessToken: jwt
     }
 
     return res.status(200).json(reponse);
