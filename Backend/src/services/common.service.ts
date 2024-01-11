@@ -9,7 +9,12 @@ class CommonService {
   }
 
   async checkUserIsExitOrNot(userId: string) {
-    const user = await UserEntity.findOneBy({ id: userId });
+    const user = await UserEntity.findOne({
+      where:{
+        id:userId
+      },
+      relations:["profile"]
+    });
     if (!user) {
       throw new ApiError(400, "User is not exits");
     }

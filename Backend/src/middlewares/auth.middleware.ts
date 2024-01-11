@@ -1,10 +1,9 @@
+import { NextFunction, Request, Response } from "express";
+import jwt from 'jsonwebtoken';
+import EnvConfiguration from "../config/env.config";
+import commonService from "../services/common.service";
 import ApiError from "../utils/ApiError";
 import asyncHandler from "../utils/AsyncHandler";
-import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from "express";
-import EnvConfiguration from "../config/env.config";
-import authService from "../services/auth/auth.service";
-import commonService from "../services/common.service";
 
 const verifyJwt = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -12,8 +11,10 @@ const verifyJwt = asyncHandler(async (req: Request, res: Response, next: NextFun
         throw new ApiError(401, "Unauthorized");
     }
     const decodeToken = jwt.verify(token, EnvConfiguration.ACCESS_TOKEN_SECRET ?? "");
-
-    // const user = commonService.checkUserIsExitOrNot(decodeToken.sub ?? "");
+    //@ts-ignore
+    const user = await commonService.checkUserIsExitOrNot(decodeToken.sub);
+    req.body.user = user;
+    next();
 })
 
 export default verifyJwt;

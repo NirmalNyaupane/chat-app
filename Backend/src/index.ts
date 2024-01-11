@@ -12,7 +12,7 @@ import helmet from "helmet";
 import EnvConfiguration from "./config/env.config";
 import errorHandler from "./middlewares/error.middleware";
 import authRouter from './routes/auth.routes';
-
+import userRouter from './routes/user.routes';
 app.use(express.json({ limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cors());
@@ -32,6 +32,10 @@ app.use(limiter);
 //app router 
 app.use("/media",mediaRouter);
 app.use("/auth", authRouter)
+app.use("/user", userRouter);
+
+
+
 //global error handler
 app.use(errorHandler);
 
@@ -40,4 +44,6 @@ AppDataSource.initialize().then(() => {
   app.listen(EnvConfiguration.PORT, () => {
     console.log(`Server started at port ${EnvConfiguration.PORT}`);
   });
+}).catch((e)=>{
+  console.log("error occurs", e)
 });

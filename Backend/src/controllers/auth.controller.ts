@@ -6,8 +6,8 @@ import otpService from "../services/otp/otp.service";
 import ApiError from "../utils/ApiError";
 import asyncHandler from "../utils/AsyncHandler";
 import SendMail from "../utils/SendingMail";
-import { isHashValueCorrect, otpGenerator } from "../utils/helper";
 import { generateAccessToken } from "../utils/accessToken";
+import { isHashValueCorrect, otpGenerator } from "../utils/helper";
 
 class AuthController {
 
@@ -189,7 +189,6 @@ class AuthController {
 
   login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const user = await commonService.emailIsRegisterOrNot(req.body.email);
-    console.log(user);
     if (!user) {
       throw new ApiError(400, "Email is not registered")
     }
