@@ -7,7 +7,7 @@ class AuthService {
   async register(body: RegisterUserValidation) {
     const user = await commonService.emailIsRegisterOrNot(body.email);
     if (user) {
-      throw new ApiError(400, "User with this email is already exits");
+      throw new ApiError(400, "User with this email is already exist");
     }
 
     const u = new UserEntity();

@@ -3,15 +3,15 @@ import { OtpEntity } from "../../entities/otp/otp.entity";
 import { UserEntity } from "../../entities/user/user.entity";
 
 class OtpService {
-  async checkOtpExitsOrNot(otpId: string) {
+  async checkOtpExistOrNot(otpId: string) {
     const response = await OtpEntity.findOneBy({ id: otpId });
     return response;
   }
 
   insert = async (otp: string, user: UserEntity, otpType: OTPType, expiryTime: string | number) => {
 
-    //check otp of user is exits or not
-    //if otp exit destroy the otp
+    //check otp of user is exist or not
+    //if otp exist destroy the otp
     const checkOtp = await OtpEntity.createQueryBuilder("otp")
       .leftJoin("otp.user", "user")
       .select(["otp.otp","otp.id"])
@@ -19,8 +19,6 @@ class OtpService {
         email: user.email,
       })
       .getOne();
-
-      console.log(checkOtp);
     if (checkOtp) {
       await OtpEntity.delete({ id: checkOtp.id });
     }
