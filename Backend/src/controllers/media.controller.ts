@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { mediaService } from "../services/media/media.service";
 class MediaController {
   async insertMedia(req: Request, res: Response, next: NextFunction) {
-    console.log("From controller", "Hello")
     const response = await mediaService.insert(
       req.file?.originalname ?? "",
       req.file?.mimetype ?? ""
