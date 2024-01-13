@@ -1,18 +1,23 @@
 'use client'
-import React from 'react'
-import { Input } from '../ui/input';
-import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import "../../style/customscrollbar.css"
+import { Search } from 'lucide-react';
 import Link from 'next/link';
-
+import { BsPeople } from 'react-icons/bs';
+import "../../style/customscrollbar.css";
+import { InputField } from '../common/InputField';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { Input } from '../ui/input';
+import GroupChat from './GroupChat';
 const ChatSideBar = () => {
     return (
         <div className='w-[300px] space-y-3 h-[100vh] px-3'>
-            <h1 className='text-2xl font-bold ml-2'>Chats</h1>
+            <div className='flex items-center justify-between'>
+                <h1 className='text-2xl font-bold ml-2'>Chats</h1>
+                <GroupChat/>
+            </div>
             <div className={cn(`flex items-center rounded-md px-3 border py-0 h-fit ml-2`)}>
-                <Search className={`mr-2 h-4 w-4 shrink-0}`}/>
+                <Search className={`mr-2 h-4 w-4 shrink-0}`} />
                 <Input
                     placeholder="search user"
                     className="flex w-full bg-transparent text-sm outline-none border-none focus:outline-none 
