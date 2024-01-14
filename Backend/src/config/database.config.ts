@@ -11,5 +11,6 @@ export const AppDataSource = new DataSource({
   namingStrategy:new SnakeNamingStrategy(),
   synchronize: true,
   logging: true,
+  // dropSchema:true,
   entities: [`${__dirname}/../entities/**/*.entity.ts`],
 });

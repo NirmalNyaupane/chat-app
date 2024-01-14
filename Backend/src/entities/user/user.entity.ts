@@ -31,4 +31,5 @@ export class UserEntity extends CommonEntity {
   @OneToOne(() => MediaEntity)
   @JoinColumn()
   profile: MediaEntity;
+
 }
