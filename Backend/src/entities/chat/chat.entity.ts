@@ -1,13 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { CommonEntity } from "..";
-import { UserEntity } from "../user/user.entity";
 import { Message } from "../message/message.entity";
+import { UserEntity } from "../user/user.entity";
 @Entity()
 export class Chat extends CommonEntity {
-    @Column({nullable:false})
+    @Column({ nullable: false })
     name: string;
 
-    @Column({nullable:false, default:false})
+    @Column({ nullable: false, default: false })
     isGroupChat: boolean;
 
     @OneToOne(() => Message)
@@ -15,9 +15,10 @@ export class Chat extends CommonEntity {
     lastMessage: Message;
 
     @ManyToMany(() => UserEntity)
-    participants: UserEntity;
+    @JoinTable()
+    participants: UserEntity[];
 
-    @OneToOne(()=>UserEntity,{cascade:true})
+    @OneToOne(() => UserEntity, { cascade: true })
     @JoinColumn()
     admin: UserEntity
 }

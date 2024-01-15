@@ -1,36 +1,36 @@
 import { Router } from "express";
-import requestBodyValidator from "../middlewares/validators.middleware";
-import {
-  RegisterUserValidation,
-  EmailVerificationValidatior,
-  InitializePasswordResetValidator,
-  FinalizePasswordResetValidator,
-  LoginValidator
-} from "../validators/auth.validator";
 import authController from "../controllers/auth.controller";
+import RequestValidator from "../middlewares/validators.middleware";
+import {
+  EmailVerificationValidatior,
+  FinalizePasswordResetValidator,
+  InitializePasswordResetValidator,
+  LoginValidator,
+  RegisterUserValidation
+} from "../validators/auth.validator";
 const router = Router();
 
 router
   .route("/register")
   .post(
-    requestBodyValidator(RegisterUserValidation),
+    RequestValidator.validate(RegisterUserValidation, "body"),
     authController.registerUser
   );
 router
   .route("/email-verification")
   .post(
-    requestBodyValidator(EmailVerificationValidatior),
+    RequestValidator.validate(EmailVerificationValidatior, "body"),
     authController.emailVerification
   );
 
-router.route('/resend-otp').post(requestBodyValidator(InitializePasswordResetValidator), authController.resendOtp)
+router.route('/resend-otp').post(RequestValidator.validate(InitializePasswordResetValidator, "body"), authController.resendOtp)
 
 router
   .route("/initialize-password-reset")
   .post(
-    requestBodyValidator(InitializePasswordResetValidator),
+    RequestValidator.validate(InitializePasswordResetValidator, "body"),
     authController.initializePassordReset
   );
-router.route("/finalize-password-reset").post(requestBodyValidator(FinalizePasswordResetValidator), authController.finalizePasswordReset)
-router.route("/login").post(requestBodyValidator(LoginValidator), authController.login)
+router.route("/finalize-password-reset").post(RequestValidator.validate(FinalizePasswordResetValidator, "body"), authController.finalizePasswordReset)
+router.route("/login").post(RequestValidator.validate(LoginValidator, "body"), authController.login)
 export default router;
