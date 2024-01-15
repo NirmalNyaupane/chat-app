@@ -1,8 +1,10 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsStrongPassword,
+  IsUUID,
   Length
 } from "class-validator";
 
@@ -18,6 +20,10 @@ class RegisterUserValidation {
   @IsNotEmpty()
   @IsStrongPassword()
   password: string;
+
+  @IsOptional()
+  @IsUUID()
+  avatarId: string
 }
 
 class EmailVerificationValidatior {
@@ -51,14 +57,14 @@ class FinalizePasswordResetValidator {
   newPassword: string;
 }
 
-class LoginValidator{
+class LoginValidator {
   @IsNotEmpty()
   @IsEmail()
-  email:string;
+  email: string;
 
   @IsNotEmpty()
   @IsStrongPassword()
-  password:string;
+  password: string;
 }
 export {
   EmailVerificationValidatior,

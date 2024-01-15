@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { CommonEntity } from "..";
 import { Message } from "../message/message.entity";
 import { UserEntity } from "../user/user.entity";
+import { MediaEntity } from "../media/media.entity";
 @Entity()
 export class Chat extends CommonEntity {
     @Column({ nullable: false })
@@ -18,7 +19,11 @@ export class Chat extends CommonEntity {
     @JoinTable()
     participants: UserEntity[];
 
-    @OneToOne(() => UserEntity, { cascade: true })
-    @JoinColumn()
+    @ManyToOne(() => UserEntity,(user)=>user.chats,{cascade:true})
     admin: UserEntity
+
+    @OneToOne(() => MediaEntity, { cascade: true })
+    @JoinColumn()
+    avatar: MediaEntity
+    
 }

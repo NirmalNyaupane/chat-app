@@ -9,6 +9,7 @@ const errorHandler = async (
   next: NextFunction
 ) => {
   let error = err;
+  console.log(err);
   // console.log(error);
   if (!(error instanceof ApiError)) {
     const statusCode = error?.statusCode ?? 500;

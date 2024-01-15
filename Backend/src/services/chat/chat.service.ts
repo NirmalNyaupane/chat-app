@@ -1,4 +1,5 @@
 import { Chat } from "../../entities/chat/chat.entity";
+import { MediaEntity } from "../../entities/media/media.entity";
 import { UserEntity } from "../../entities/user/user.entity";
 
 class ChatService {
@@ -12,10 +13,23 @@ class ChatService {
         return builder;
     }
 
-    async createSingleChat(sender:UserEntity, receiver:UserEntity){
+    async createSingleChat(sender: UserEntity, receiver: UserEntity) {
         const chat = new Chat();
-        chat.name="single chat";
-        chat.participants=[sender, receiver]
+        chat.name = "single chat";
+        chat.participants = [sender, receiver]
+        return await chat.save();
+    }
+
+    async createGroupChat(name: string, admin: UserEntity, participants: UserEntity[], media: MediaEntity | null) {
+        console.log(media)
+        const chat = new Chat();
+        chat.name = name;
+        chat.participants = [...participants, admin];
+        chat.admin = admin;
+        chat.isGroupChat = true;
+        if (media) {
+            chat.avatar = media
+        }
         return await chat.save();
     }
 }

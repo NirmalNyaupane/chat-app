@@ -1,10 +1,12 @@
+import { MediaEntity } from "../../entities/media/media.entity";
 import { UserEntity } from "../../entities/user/user.entity";
 import ApiError from "../../utils/ApiError";
+import { generateHashValue } from "../../utils/helper";
 import { RegisterUserValidation } from "../../validators/auth.validator";
 import commonService from "../common.service";
 
 class AuthService {
-  async register(body: RegisterUserValidation) {
+  async register(body: RegisterUserValidation, media: MediaEntity | null) {
     const user = await commonService.emailIsRegisterOrNot(body.email);
     if (user) {
       throw new ApiError(400, "User with this email is already exist");
@@ -13,8 +15,11 @@ class AuthService {
     const u = new UserEntity();
     u.name = body.name;
     u.email = body.email;
-    u.password = body.password;
-
+    const hashPassword = await generateHashValue(body.password)
+    u.password = hashPassword;
+    if (media) {
+      u.profile = media
+    }
     const response = await UserEntity.save(u);
     return response;
   }
@@ -29,9 +34,10 @@ class AuthService {
   }
 
   async resetPassword(user: UserEntity, newPassword: string) {
-    user.password = newPassword;
-    const response =  await UserEntity.save(user);
-    const{password, ...remainingInfo} = response;
+    const hashPassword = await generateHashValue(newPassword);
+    user.password = hashPassword;
+    const response = await UserEntity.save(user);
+    const { password, ...remainingInfo } = response;
     return remainingInfo;
   }
 }

@@ -7,10 +7,12 @@ const otpGenerator = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+const generateHashValue = async (value:string)=>{
+  return await bcrypt.hash(value, 10)
+}
+
 const isHashValueCorrect = async (hash: string, plainText: string | number) => {
-  console.log("plain", plainText)
-  console.log("hash", hash);
   return await bcrypt.compare(plainText.toString(), hash);
 };
 
-export { otpGenerator, isHashValueCorrect };
+export { otpGenerator, isHashValueCorrect, generateHashValue };

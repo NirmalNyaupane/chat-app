@@ -1,11 +1,10 @@
 "use client"
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem } from '../ui/dropdown-menu';
-import React, { useState } from 'react'
-import { BsPeople } from 'react-icons/bs'
-import { InputField } from '../common/InputField'
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
+import { useState } from 'react';
+import { BsPeople } from 'react-icons/bs';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Input } from '../ui/input';
 
 const GroupChat = () => {

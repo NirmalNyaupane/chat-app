@@ -8,14 +8,21 @@ import asyncHandler from "../utils/AsyncHandler";
 import SendMail from "../utils/SendingMail";
 import { generateAccessToken } from "../utils/accessToken";
 import { isHashValueCorrect, otpGenerator } from "../utils/helper";
+import { MediaEntity } from "../entities/media/media.entity";
+import { mediaService } from "../services/media/media.service";
 
 class AuthController {
-
-
   //  This controller handle the user registration
   registerUser = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-      const userResponse = await authService.register(req.body);
+      let media: MediaEntity | null = null;
+      if (req.body.avatarId) {
+        media = await mediaService.getMediaById(req.body.avatarId)
+        if (!media) {
+          throw new ApiError(400, "avatarId doesnot exists")
+        }
+      }
+      const userResponse = await authService.register(req.body, media);
 
       //generate otp
       const otp = otpGenerator();
