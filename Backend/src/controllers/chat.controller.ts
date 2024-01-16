@@ -68,21 +68,30 @@ class ChatController {
         return res.status(200).json(chatResponse);
     })
 
-    updateChat = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        //remove duplicate ids 
-        const participants = [...new Set([...req.body.participants])];
 
-        if (participants.length < 2) {
-            throw new ApiError(400, "seems like you are passed duplicate participants")
+    addParticipants = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        //remove duplicate ids 
+        let participants = [...new Set([...req.body.participants])];
+
+
+        if (participants.includes(req.body.user.id)) {
+            throw new ApiError(400, "You provide one of your id");
         }
 
         const usersResponse = await userService.findMultipleUserbyIds(participants);
-        console.log(usersResponse);
+
         if (!usersResponse) {
             throw new ApiError(500, "Internal server error");
         }
-        const admin = await commonService.checkUserIsExistOrNot(req.body.id);
 
+        for (let user of usersResponse) {
+            if (user === null) {
+                throw new ApiError(400, "All provided participants are not user");
+            }
+        }
+        //@ts-ignore
+        const constres = await chatService.addParticipants(req.body.groupChatAdmin, usersResponse)
+        return res.status(200).json(constres)
     })
 }
 

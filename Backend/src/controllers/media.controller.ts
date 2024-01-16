@@ -7,7 +7,7 @@ class MediaController {
       req.file?.mimetype ?? ""
     );
 
-    res.status(200).json(response)
+    res.status(200).json(response);
   }
 }
 

@@ -32,6 +32,21 @@ class ChatService {
         }
         return await chat.save();
     }
+
+    async findChatAdmin(chatId: string) {
+        return await Chat.findOne({
+            where: { id: chatId }, relations: {
+                admin: true,
+                participants: true
+            }
+        })
+    }
+
+    async addParticipants(chat:Chat, newParticipants:UserEntity[]) {
+        const participants=[...chat.participants, ...newParticipants];
+        chat.participants = participants;
+        return await chat.save();
+    }
 }
 
 export default new ChatService();
