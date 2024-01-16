@@ -1,7 +1,6 @@
 "use client";
-import { EmailVerificationEnum, UserRoleEnum } from "@/constants/enum";
+import { EmailVerificationEnum } from "@/constants/enum";
 import { loginFormValidation } from "@/lib/formvalidation/authvalidation";
-import { loginReducer } from "@/redux/slices/auth.slice";
 import { loginApi } from "@/services/auth.service";
 import { showError } from "@/utils/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,13 +10,12 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaGoogle } from "react-icons/fa";
 import { z } from "zod";
 import { InputField, InputFieldWithRightIcon } from "../common/InputField";
 import LoadingButton from "../common/LoadingButton";
-import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { toast } from "../ui/use-toast";
+
 
 type formData = z.infer<typeof loginFormValidation>;
 
@@ -115,7 +113,7 @@ const Login = () => {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="terms"
-            className="border-white"
+            className="border-gray-500 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
             checked={keepMeLoggedIn}
             onCheckedChange={() => setKeepMeLoggedIn(!keepMeLoggedIn)}
           />
@@ -127,10 +125,10 @@ const Login = () => {
             Keep me logged in
           </label>
         </div>
-        <div className="ml-auto font-medium text-red-500">Forget Password?</div>
+        <div className="ml-auto font-medium text-green-500">Forget Password?</div>
       </div>
 
-      <LoadingButton type="submit" isLoading={loginMutation.isPending}>
+      <LoadingButton type="submit" isLoading={loginMutation.isPending} clasName="bg-green-500 hover:bg-green-400">
         Login
       </LoadingButton>
     </form>

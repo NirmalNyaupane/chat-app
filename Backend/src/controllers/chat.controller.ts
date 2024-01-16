@@ -161,7 +161,37 @@ class ChatController {
         return res.status(200).json({ message: "Rename chat sucessfully", renameResponse })
     })
 
+    leaveGroupChat = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params;
+        const { participant } = req.body;
+        const chat = await chatService.findChatById(id);
 
+        if (!chat) {
+            throw new ApiError(400, "Chat doesnot found");
+        }
+
+        if (!chat.isGroupChat) {
+            throw new ApiError(400, "Group chat with that id doesnot exists");
+        }
+
+        const participantsId = chat.participants.map((participant) => participant.id);
+
+        if (!participantsId.includes(participant)) {
+            throw new ApiError(400, "You are not belongs to this chat");
+        }
+
+        if (chat.admin.id === req.body.user.id) {
+            throw new ApiError(400, "we are implement for admin soon ");
+        }
+
+        const removeParticipantResponse = await chatService.removeParticipant(chat, participant);
+
+        if (removeParticipantResponse) {
+            res.status(200).json({ message: "Remove user sucessfully", removeParticipantResponse })
+        } else {
+            throw new ApiError(500, "Internal server error")
+        }
+    })
 }
 
 export default new ChatController();    

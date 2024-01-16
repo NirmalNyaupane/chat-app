@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { CSSProperties, useState } from "react";
+import { GiChatBubble } from "react-icons/gi";
 type LinkItems = {
   label: string;
   url: string;
@@ -16,29 +17,24 @@ interface props {
 }
 
 const DefaultNavBar = ({ linkItems, className, style }: props) => {
-  const [isFoucs, setFocus] = useState(false);
-  const [isLoggin, setIsLogin] = useState(false);
-  const path = usePathname()
 
   return (
     <>
       <header
-        className={cn(`max-width bg-transparent py-5 ${className}`)}
+        className={cn(`bg-transparent py-6 ${className}`)}
       >
         <nav className="flex justify-between items-center relative w-[full]">
           {/* Logo section  */}
           <div className="flex items-center gap-4">
-            <Link href={"/"}>
-              <h1 className="text-4xl font-bold gradient-text">
-                Chat Tak
-              </h1>
+            <Link href={"/"} className="text-5xl text-green-500">
+              <GiChatBubble />
             </Link>
           </div>
           {linkItems && (
-            <div className="hidden md:flex h-5 items-center space-x-4 text-white text-md font-bold">
+            <div className="hidden md:flex h-5 items-center space-x-4 text-md">
               {linkItems.map((singleLink, ind) => {
                 return <div key={(ind + 98) * 37}>
-                  <Link href={singleLink.url}>{singleLink.label}</Link>
+                  <Link href={singleLink.url} className="hover:border-b-2 hover:border-b-green-500">{singleLink.label}</Link>
                 </div>
               })}
             </div>

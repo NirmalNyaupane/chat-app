@@ -26,5 +26,7 @@ router.route("/groupchat/remove-participants/:id")
 router.route("/:id").delete(verifyJwt, RequestValidator.validate(ValidateParamId, "param"), chatController.deleteChat)
 
 //:id is a id of chat
-router.route("/groupchat/:id").patch(verifyJwt, RequestValidator.validate(ValidateParamId, "param"), RequestValidator.validate(RenameGroupChatValidation,"body"),chatAdminAccess, chatController.renameGroupChat)
+router.route("/groupchat/:id").patch(verifyJwt, RequestValidator.validate(ValidateParamId, "param"), RequestValidator.validate(RenameGroupChatValidation, "body"), chatAdminAccess, chatController.renameGroupChat);
+//:id is a id of chat
+router.route("/groupchat/leavegroup/:id").patch(verifyJwt, RequestValidator.validate(ValidateParamId, "param"), RequestValidator.validate(RemoveParticipantsValidation, "body"), chatController.leaveGroupChat)
 export default router;

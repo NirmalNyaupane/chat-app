@@ -70,8 +70,7 @@ const Register: FC<props> = ({ role, className }: props) => {
           duration: 1000,
         });
         router.push(
-          `/email-verify?email=${getValues("email")}&action=${
-            EmailVerificationEnum.NewRegister
+          `/email-verify?email=${getValues("email")}&action=${EmailVerificationEnum.NewRegister
           }`
         );
         reset();
@@ -169,7 +168,10 @@ const Register: FC<props> = ({ role, className }: props) => {
           }}
         />
 
-        <LoadingButton isLoading={isPending}>Register</LoadingButton>
+
+        <LoadingButton type="submit" isLoading={isPending} clasName="bg-green-500 hover:bg-green-400">
+          Login
+        </LoadingButton>
 
         {role === UserRoleEnum.USER && (
           <>
