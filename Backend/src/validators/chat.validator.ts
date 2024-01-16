@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsOptional, IsString, IsUUID, Length, MinLength, arrayMinSize, isUUID } from "class-validator";
+import { ArrayMinSize, IsArray, IsNotEmpty, IsString, IsUUID, Length, Min } from "class-validator";
 
 
 class GroupChatValidation {
@@ -20,5 +20,18 @@ class AddParticipantsValidation {
     participants: string[]
 }
 
+class RemoveParticipantsValidation {
+    @IsNotEmpty()
+    @IsUUID()
+    participant: string;
+}
 
-export { GroupChatValidation, AddParticipantsValidation };
+class RenameGroupChatValidation {
+    @IsNotEmpty()
+    @IsString()
+    @Length(3, 15)
+    name: string;
+}
+
+
+export { AddParticipantsValidation, GroupChatValidation, RemoveParticipantsValidation, RenameGroupChatValidation };

@@ -4,12 +4,28 @@ import { UserEntity } from "../../entities/user/user.entity";
 
 class ChatService {
     async findChatById(id: string) {
-        return await Chat.findOneBy({ id: id });
+        return await Chat.findOne({
+            where: {
+                id: id
+            },
+            relations: {
+                participants: true,
+                admin: true
+            }
+        });
+    }
+
+
+    async findPrivateChatByUserId(userid: string) {
+        const builder = await Chat.createQueryBuilder("chat").leftJoinAndSelect("chat.participants", "user").where("user.id=:id", { id: userid })
+            .andWhere("chat.isGroupChat=:isGroupChat", {
+                isGroupChat: false
+            }).getOne();
+        return builder;
     }
 
     async findChatByUserId(userid: string) {
         const builder = await Chat.createQueryBuilder("chat").leftJoinAndSelect("chat.participants", "user").where("user.id=:id", { id: userid }).getOne();
-        console.log(builder);
         return builder;
     }
 
@@ -42,9 +58,26 @@ class ChatService {
         })
     }
 
-    async addParticipants(chat:Chat, newParticipants:UserEntity[]) {
-        const participants=[...chat.participants, ...newParticipants];
+    async addParticipants(chat: Chat, newParticipants: UserEntity[]) {
+        const participants = [...chat.participants, ...newParticipants];
         chat.participants = participants;
+        return await chat.save();
+    }
+
+    async removeParticipant(chat: Chat, participantsId: string) {
+        chat.participants = chat.participants.filter((participant) => {
+            return participant.id !== participantsId;
+        })
+
+        return await chat.save();
+    }
+
+    async deleteChat(id: string) {
+        return await Chat.delete({ id: id });
+    }
+
+    async renameChat(chat: Chat, name: string) {
+        chat.name = name;
         return await chat.save();
     }
 }
