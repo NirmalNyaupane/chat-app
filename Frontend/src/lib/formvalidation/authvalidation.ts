@@ -3,11 +3,11 @@ import { z } from "zod";
 /************* Register form validation **********************/
 const registerValidation = z
   .object({
-    full_name: z
+    name: z
       .string({
-        required_error: "Full Name is required",
+        required_error: "Name is required",
       })
-      .min(1, "Full Name is required")
+      .min(1, "Name is required")
       .min(5, "Minimum length must be 5 characters")
       .max(40, "Maximum length must be 40 characters")
       .trim()
@@ -20,17 +20,6 @@ const registerValidation = z
         invalid_type_error: "Email must be an email",
       })
       .email("Email must be an email"),
-    phone_number: z
-      .string({
-        required_error: "Phone number is required",
-      })
-      .max(10, "Please enter valid phone number")
-      .min(10, "Please enter valid phone number"),
-
-    address: z
-      .string({ required_error: "Address is required" })
-      .max(20, "Adress must be contains maximum 20 characters")
-      .min(5, "Address must be minimum 5 characters"),
 
     password: z
       .string({ required_error: "Password is required" })

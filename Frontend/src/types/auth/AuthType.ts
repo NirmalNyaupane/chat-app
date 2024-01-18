@@ -1,46 +1,12 @@
-import { registerValidation } from "@/lib/formvalidation/authvalidation";
-import {
-  ApiFailureError,
-  ApiSucessResponse,
-} from "../generics/ApiGenericsType";
-import { z } from "zod";
-import { UserRoleEnum } from "@/constants/enum";
-import organizerRegisterFormValidation from "@/lib/formvalidation/organizerRegister";
+import { loginFormValidation, registerValidation } from '@/lib/formvalidation/authvalidation';
+import { z } from 'zod';
+type RegisterUserType = z.infer<typeof registerValidation>
 
-export interface UserResponse {
-  id: string;
-  avatar: string;
-  is_verified: boolean;
-  is_organizer_registered: boolean;
-  full_name: string;
-  email: string;
-  phone_number: string;
-  role: string;
-  address: string;
-  updatedAt: string;
-  createdAt: string;
+
+type LoginUserType = z.infer<typeof loginFormValidation>
+type LoginResponse = {
+  id: string,
+  isVerified: boolean,
+  accessToken: string
 }
-
-export type UserRegisterPayload = Omit<
-  z.infer<typeof registerValidation>,
-  "confirmPassword"
->;
-
-export type AuthRegisterResponse = ApiSucessResponse<UserResponse>;
-
-export type AuthRegisterErrorResponse = ApiFailureError<string>;
-
-export interface LoginSucessResponse {
-  id: string;
-  access_token: string;
-  role: UserRoleEnum;
-  is_verified: boolean;
-  is_organizer_registered: boolean;
-}
-
-export type LoginFailure = ApiFailureError<[]>;
-
-
-/************** Register organizer ***************************/
-export type OrganizerRegisterFormData = z.infer<typeof organizerRegisterFormValidation>
-
+export type { RegisterUserType, LoginUserType, LoginResponse}

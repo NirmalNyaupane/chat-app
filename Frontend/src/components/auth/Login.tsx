@@ -1,31 +1,31 @@
 "use client";
+import { AUTH_COOKIE_NAME } from "@/constants/config";
 import { EmailVerificationEnum } from "@/constants/enum";
 import { loginFormValidation } from "@/lib/formvalidation/authvalidation";
-import { loginApi } from "@/services/auth.service";
+import { loginUserApi } from "@/service/auth/auth.service";
+import { LoginUserType } from "@/types/auth/AuthType";
+import { setCookie } from "@/utils/cookie";
 import { showError } from "@/utils/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { InputField, InputFieldWithRightIcon } from "../common/InputField";
 import LoadingButton from "../common/LoadingButton";
 import { Checkbox } from "../ui/checkbox";
-import { toast } from "../ui/use-toast";
-
-
-type formData = z.infer<typeof loginFormValidation>;
-
+import useCustomToast from "@/hooks/useToast";
 const Login = () => {
   /******************* state **************************/
   const [isPasswordShow, setPasswordShow] = useState(false);
   const [keepMeLoggedIn, setKeepMeLoggedIn] = useState<boolean>(false);
 
+
   /********************** Hooks  *******************************/
   const router = useRouter();
+  const toast = useCustomToast()
 
   /******* React hook form for form handling *****************/
   const {
@@ -34,42 +34,37 @@ const Login = () => {
     handleSubmit,
     getValues,
     reset
-  } = useForm<formData>({
+  } = useForm<LoginUserType>({
     resolver: zodResolver(loginFormValidation), //zod validaton
   });
 
   /******************** React query mutation  ****************/
   const loginMutation = useMutation({
-    mutationFn: (data: formData) => {
-      return loginApi(data);
+    mutationFn: (data: LoginUserType) => {
+      return loginUserApi(data);
     },
     onSuccess: (data) => {
       if (data.status === 200 || data.status === 201) {
-        const jwt = data.data.access_token;
-
+        const jwt = data.data.accessToken;
         if (!jwt) {
-          toast({
-            description: "Something went wrong",
-            duration: 1000,
-            variant: "destructive",
-          });
-
+          toast.error("Something went wrong")
           return null;
         }
         reset();
+        setCookie({
+          cookieName: AUTH_COOKIE_NAME ?? "",
+          cookieValue: jwt,
+          path: '/',
+        });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
+        router.push('/chat');
       }
     },
     onError: (error: AxiosError<any, any>) => {
-      toast({
-        description: showError(error),
-        duration: 1000,
-        variant: "destructive",
-      });
-
+      toast.error(showError(error))
       if (error.response?.data?.is_verified === false) {
         router.push(
-          `/email-verify?email=${getValues("email")}&action=${
-            EmailVerificationEnum.NewRegister
+          `/email-verify?email=${getValues("email")}&action=${EmailVerificationEnum.NewRegister
           }`
         );
       }

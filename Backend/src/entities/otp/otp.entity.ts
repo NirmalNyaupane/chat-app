@@ -32,7 +32,7 @@ export class OtpEntity extends CommonEntity {
   @Column({type:"enum", enum:OTPType, nullable:false})
   otpType:OTPType
 
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => UserEntity, {cascade:true})
   @JoinColumn()
   user: UserEntity;
 }

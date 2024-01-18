@@ -1,8 +1,8 @@
 import { EmailVerificationEnum, UserRoleEnum } from "@/constants/enum";
 import { registerValidation } from "@/lib/formvalidation/authvalidation";
 import { cn } from "@/lib/utils";
-import { userRegisterApi } from "@/services/auth.service";
-import { UserRegisterPayload } from "@/types/auth/AuthType";
+import { userRegisterApi } from "@/service/auth/auth.service";
+import { RegisterUserType } from "@/types/auth/AuthType";
 import { ApiFailureError } from "@/types/generics/ApiGenericsType";
 import { showError } from "@/utils/helper";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,18 +13,14 @@ import { useRouter } from "next/navigation";
 import { FC, memo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
-import { z } from "zod";
 import {
   InputField,
-  InputFieldWithRightIcon,
-  PhoneNumberInputField,
+  InputFieldWithRightIcon
 } from "../common/InputField";
 import LoadingButton from "../common/LoadingButton";
 import { Button } from "../ui/button";
 import { FormField } from "../ui/form";
 import { useToast } from "../ui/use-toast";
-type formData = z.infer<typeof registerValidation>;
-
 interface props {
   role: UserRoleEnum;
   className?: string;
@@ -34,15 +30,11 @@ const Register: FC<props> = ({ role, className }: props) => {
   /********************** state *********************************/
   const [isPasswordShow, setPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setConfirmPasswordShow] = useState(false);
-  const [countryCode, setCountryCode] = useState<string>("");
 
   /******************* Hooks *******************/
   const { toast } = useToast();
   const router = useRouter();
   /*************** Methods ***************************/
-  const getCountryCode = (code: string) => {
-    setCountryCode(code);
-  };
 
   /** Form handling using react-hook-form ****************/
   const {
@@ -52,13 +44,13 @@ const Register: FC<props> = ({ role, className }: props) => {
     control,
     getValues,
     reset,
-  } = useForm<formData>({
+  } = useForm<RegisterUserType>({
     resolver: zodResolver(registerValidation),
   });
 
   /**************** Mutation query using react-query ******************/
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: UserRegisterPayload) => {
+    mutationFn: (data: RegisterUserType) => {
       return userRegisterApi(data);
     },
     onSuccess: (data) => {
@@ -86,12 +78,8 @@ const Register: FC<props> = ({ role, className }: props) => {
     },
   });
 
-  const formSubmit: SubmitHandler<formData> = async (e) => {
-    const { confirmPassword, phone_number, ...restData } = e;
-    const newPhoneNumber = countryCode.concat(getValues("phone_number"));
-    const sendData = { ...restData, role: role, phone_number: phone_number };
-
-    mutate(sendData);
+  const formSubmit: SubmitHandler<RegisterUserType> = async (data) => {
+    mutate(data);
   };
 
   return (
@@ -101,17 +89,17 @@ const Register: FC<props> = ({ role, className }: props) => {
         onSubmit={handleSubmit(formSubmit)}
       >
         <FormField
-          name="full_name"
+          name="name"
           control={control}
           render={({ field }) => {
             return (
               <InputField
                 type="text"
                 placeholder="Full Name"
-                formReturn={register("full_name")}
+                formReturn={register("name")}
                 className="bg-transparent"
                 {...field}
-                errorMessage={errors.full_name?.message}
+                errorMessage={errors.name?.message}
               />
             );
           }}

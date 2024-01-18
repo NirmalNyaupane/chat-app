@@ -11,9 +11,9 @@ const EmailVerify = ({ searchParams }: {
 
   //mutation
   return (
-    <>
-      <DefaultNavBar linkItems={homeNavItems} />
-      <div className="max-width h-[80vh] flex justify-center items-center">
+    <div className="max-width">
+      <DefaultNavBar linkItems={homeNavItems} className="w-full" />
+      <div className=" h-[80vh] flex justify-center flex-col items-center">
         <div className="w-[100%] md:w-[60%] lg:w-[40%] border border-gray-300 p-5 md:p-10 rounded-md">
           <EmailVerification
             email={email}
@@ -21,7 +21,7 @@ const EmailVerify = ({ searchParams }: {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

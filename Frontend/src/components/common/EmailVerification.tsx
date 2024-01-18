@@ -1,7 +1,6 @@
 "use client";
 import { EmailVerificationEnum } from "@/constants/enum";
 import { otpValidation } from "@/lib/formvalidation/authvalidation";
-import { otpVerificationApi, resendOtpApi } from "@/services/auth.service";
 import { ApiFailureError } from "@/types/generics/ApiGenericsType";
 import CountDown from "@/utils/CountDown";
 import { showError } from "@/utils/helper";
@@ -16,6 +15,7 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { InputField } from "./InputField";
 import LoadingButton from "./LoadingButton";
+import { otpVerificationApi, resendOtpApi } from "@/service/auth/auth.service";
 
 type otptype = z.infer<typeof otpValidation>;
 
@@ -48,7 +48,7 @@ const EmailVerification = ({
   /*************** mutation for new password ******************************************/
   const newRegisterOtpVerification = useMutation({
     mutationFn: async () => {
-      return await otpVerificationApi(email, otp);
+      return await otpVerificationApi({ email, otp });
     },
     onSuccess: (data) => {
       if (data.status === 200 || data.status === 201) {

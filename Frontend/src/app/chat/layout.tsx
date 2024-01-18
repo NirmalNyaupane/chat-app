@@ -1,13 +1,10 @@
-import ChatSideBar from "@/components/chat/ChatSideBar";
-const ChatLayout = ({ children }: { children: React.ReactNode }) => {
+import ChatLayout from "@/layout/ChatLayout";
+const GlobaChatLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <main className="flex gap-3 overflow-hidden">
-            <ChatSideBar />
-            {children}
+            <ChatLayout>{children}</ChatLayout>
         </main>
     )
-
-
 }
 
-export default ChatLayout;
+export default GlobaChatLayout;

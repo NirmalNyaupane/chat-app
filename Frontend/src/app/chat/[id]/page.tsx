@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { Image as ImageIcon, Info, Mic, Phone, SendHorizontal, Smile, Video } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react';
-
+import { useAuth } from '@/hooks/useAuth';
 const messageSample = [
     {
         message: "Hello",
@@ -84,6 +84,8 @@ const messageSample = [
 
 const MessagePage = () => {
     const [isInfoOpen, setInfoOpen] = useState(false);
+    const {currentUser} = useAuth();
+    console.log(currentUser);
     return (
         <>
             {/* Chat container */}
