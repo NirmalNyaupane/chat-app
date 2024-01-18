@@ -11,14 +11,12 @@ class RequestValidator {
   }
 
   private static param(req: Request, validationClass: any) {
-    console.log(req.params)
     return plainToClass(validationClass, req.params)
   }
 
   private static query(req: Request, validationClass: any) {
     return plainToClass(validationClass, req.query)
   }
-
 
   static validate(ValidationClass: any, validationType: Validation) {
     return async (req: Request, res: Response, next: NextFunction) => {

@@ -33,5 +33,4 @@ class RenameGroupChatValidation {
     name: string;
 }
 
-
 export { AddParticipantsValidation, GroupChatValidation, RemoveParticipantsValidation, RenameGroupChatValidation };

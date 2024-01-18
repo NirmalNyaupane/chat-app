@@ -1,8 +1,20 @@
-import { IsUUID } from "class-validator";
+import { IsNumberString, IsOptional, IsString, IsUUID } from "class-validator";
 
-class ValidateParamId{
+class ValidateParamId {
     @IsUUID()
-    id:string;
+    id: string;
 }
+class QueryValidation {
+    @IsOptional()
+    @IsNumberString()
+    page: number;
 
-export {ValidateParamId};
+    @IsOptional()
+    @IsNumberString()
+    limit: number;
+
+    @IsOptional()
+    @IsString()
+    search: string;
+}
+export { QueryValidation, ValidateParamId };

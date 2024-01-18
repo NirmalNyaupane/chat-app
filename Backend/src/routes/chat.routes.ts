@@ -4,9 +4,10 @@ import verifyJwt from '../middlewares/auth.middleware';
 import chatAdminAccess from '../middlewares/chatadmin.middleware';
 import RequestValidator from '../middlewares/validators.middleware';
 import { AddParticipantsValidation, GroupChatValidation, RemoveParticipantsValidation, RenameGroupChatValidation } from '../validators/chat.validator';
-import { ValidateParamId } from '../validators/common.validator';
+import { QueryValidation, ValidateParamId } from '../validators/common.validator';
 const router = Router();
 
+router.route("/").get(verifyJwt, RequestValidator.validate(QueryValidation, "query"), chatController.getAllChats)
 //:id is a id of receiver
 router.route("/c/:id").post(verifyJwt, RequestValidator.validate(ValidateParamId, "param"), chatController.createPrivateChat);
 router.route("/groupchat")

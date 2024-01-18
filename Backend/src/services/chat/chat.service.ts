@@ -1,7 +1,11 @@
 import { Chat } from "../../entities/chat/chat.entity";
 import { MediaEntity } from "../../entities/media/media.entity";
 import { UserEntity } from "../../entities/user/user.entity";
-
+type ChatFilterType = {
+    page?: number,
+    limit?: number,
+    search?: string,
+}
 class ChatService {
     async findChatById(id: string) {
         return await Chat.findOne({
@@ -14,8 +18,6 @@ class ChatService {
             }
         });
     }
-
-
     async findPrivateChatByUserId(userid: string) {
         const builder = await Chat.createQueryBuilder("chat").leftJoinAndSelect("chat.participants", "user").where("user.id=:id", { id: userid })
             .andWhere("chat.isGroupChat=:isGroupChat", {
@@ -79,6 +81,29 @@ class ChatService {
     async renameChat(chat: Chat, name: string) {
         chat.name = name;
         return await chat.save();
+    }
+ 
+    async getAllChats(options: ChatFilterType, userId: string) {
+        const builder = Chat.createQueryBuilder("chat").innerJoinAndSelect("chat.participants", "user")
+            .leftJoinAndSelect("chat.admin", "admin")
+            .leftJoinAndSelect("chat.lastMessage", "message").where("user.id=:id", { id: userId });
+
+        if (options.limit) {
+            builder.limit(options.limit);
+
+            if (options.page) {
+                const take = (options.page - 1) * options.limit;
+                builder.take(take);
+            }
+        }
+
+        if (options.search) {
+            builder.andWhere("chat.name=:name", {
+                name: `ILIKE %${options.search}%`
+            })
+        }
+
+        return await builder.getManyAndCount()
     }
 }
 

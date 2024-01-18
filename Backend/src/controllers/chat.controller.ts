@@ -7,6 +7,7 @@ import { mediaService } from '../services/media/media.service';
 import userService from '../services/user/user.service';
 import ApiError from '../utils/ApiError';
 import asyncHandler from '../utils/AsyncHandler';
+import { paginateResponse } from '../utils/paginationResponse';
 
 class ChatController {
     createPrivateChat = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -191,6 +192,17 @@ class ChatController {
         } else {
             throw new ApiError(500, "Internal server error")
         }
+    })
+
+
+    //get all chats
+    getAllChats = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+        const { page, limit, name } = req.query;
+        const userId = req.body.user.id;
+
+        const [chat, count] = await chatService.getAllChats(req.query, userId);
+        //@ts-ignore
+        return res.status(200).json({ ...paginateResponse(count, +page, +limit), data: chat })
     })
 }
 
