@@ -43,13 +43,29 @@ const uploadFileMiddleWares = (
           return next(
             new ApiError(
               400,
-              `File size is large. Allowed size is atmost ${
-                allowedSize / (1024 * 1024)
+              `File size is large. Allowed size is atmost ${allowedSize / (1024 * 1024)
               }MB`
             )
           );
         }
       }
+
+      case MediaType.Document: {
+        allowedExtension.push(".jpeg", ".jpg", ".png", ".doc", ".pdf");
+        allowedSize = 1024 * 1024 * 1024;
+
+        //validate size
+        if (req.file?.size && req.file.size > allowedSize) {
+          return next(
+            new ApiError(
+              400,
+              `File size is large. Allowed size is atmost ${allowedSize / (1024 * 1024)
+              }MB`
+            )
+          );
+        }
+      }
+
     }
 
     //check if file size is less or not

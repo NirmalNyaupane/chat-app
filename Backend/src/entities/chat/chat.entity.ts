@@ -26,5 +26,4 @@ export class Chat extends CommonEntity {
     @OneToOne(() => MediaEntity, { cascade: true })
     @JoinColumn()
     avatar: MediaEntity
-
 }

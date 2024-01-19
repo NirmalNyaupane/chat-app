@@ -4,6 +4,7 @@ import { MediaEntity } from "../media/media.entity";
 import bcrypt from "bcrypt";
 import EnvConfiguration from "../../config/env.config";
 import { Chat } from '../chat/chat.entity';
+import { Message } from "../message/message.entity";
 
 @Entity("user")
 export class UserEntity extends CommonEntity {
@@ -25,4 +26,7 @@ export class UserEntity extends CommonEntity {
 
   @OneToMany(() => Chat, (chat) => chat.admin)
   chats: Chat[]
+  
+  @OneToMany(()=>Message, (message)=>message.sender)
+  message:Message[];
 }

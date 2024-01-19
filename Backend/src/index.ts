@@ -14,6 +14,7 @@ import errorHandler from "./middlewares/error.middleware";
 import authRouter from './routes/auth.routes';
 import userRouter from './routes/user.routes';
 import chatRouter from './routes/chat.routes';
+import messageRoute from './routes/message.routes';
 app.use(express.json({ limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cors());
@@ -35,7 +36,7 @@ app.use("/media", mediaRouter);
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/chat", chatRouter);
-
+app.use("/message", messageRoute);
 
 //global error handler
 app.use(errorHandler);

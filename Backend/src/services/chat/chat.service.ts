@@ -31,6 +31,19 @@ class ChatService {
         return builder;
     }
 
+    async findAllChatByUserId(userId: string) {
+        const user = await UserEntity.find({
+            where: {
+                id: userId
+            },
+            relations: {
+                chats: true
+            }
+        });
+
+        return user;
+    }
+
     async createSingleChat(sender: UserEntity, receiver: UserEntity) {
         const chat = new Chat();
         chat.name = "single chat";
@@ -82,11 +95,11 @@ class ChatService {
         chat.name = name;
         return await chat.save();
     }
- 
+
     async getAllChats(options: ChatFilterType, userId: string) {
         const builder = Chat.createQueryBuilder("chat").innerJoinAndSelect("chat.participants", "user")
             .leftJoinAndSelect("chat.admin", "admin")
-            .leftJoinAndSelect("chat.lastMessage", "message").where("user.id=:id", { id: userId });
+            .leftJoinAndSelect("chat.lastMessage", "message").where("user.id=:id", { id: userId }).orderBy("chat.updatedAt", "DESC");
 
         if (options.limit) {
             builder.limit(options.limit);
