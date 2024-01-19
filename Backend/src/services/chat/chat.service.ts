@@ -97,7 +97,7 @@ class ChatService {
     }
 
     async getAllChats(options: ChatFilterType, userId: string) {
-        const builder = Chat.createQueryBuilder("chat").innerJoinAndSelect("chat.participants", "user")
+        const builder = Chat.createQueryBuilder("chat").leftJoinAndSelect("chat.participants", "user")
             .leftJoinAndSelect("chat.admin", "admin")
             .leftJoinAndSelect("chat.lastMessage", "message").where("user.id=:id", { id: userId }).orderBy("chat.updatedAt", "DESC");
 
@@ -109,13 +109,13 @@ class ChatService {
                 builder.take(take);
             }
         }
-
+    
         if (options.search) {
-            builder.andWhere("chat.name=:name", {
-                name: `ILIKE %${options.search}%`
-            })
+            // builder.andWhere("chat.name = :name", {
+            //     name: `ILIKE %${options.search}%`
+            // })
+            builder.andWhere('chat.name ILIKE :name', { name: `%${options.search}%` })
         }
-
         return await builder.getManyAndCount()
     }
 }

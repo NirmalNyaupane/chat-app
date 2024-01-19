@@ -28,7 +28,7 @@ const limiter = rateLimit({
 });
 
 app.use(cookieParser());
-app.use(limiter);
+// app.use(limiter);
 
 
 //app router 

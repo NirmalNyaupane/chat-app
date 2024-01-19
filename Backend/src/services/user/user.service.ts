@@ -3,7 +3,10 @@ import { MediaEntity } from "../../entities/media/media.entity";
 import { UserEntity } from "../../entities/user/user.entity";
 import ApiError from "../../utils/ApiError";
 import commonService from "../common.service";
-
+interface ChatFilterType {
+    page?: number,
+    limit?: number,
+}
 class UserService {
     async updateProfilePicture(mediaId: string, user: UserEntity) {
         const media = await MediaEntity.findOneBy({ id: mediaId });
@@ -36,6 +39,27 @@ class UserService {
         } finally {
             await queryRunner.release();
         }
+    }
+
+    async findUserForChat(options: ChatFilterType, email: string, requestedUserId: string) {
+        const builder = UserEntity.createQueryBuilder("user").where("user.email=:email", {
+            email: email.trim()
+        }).andWhere("user.isVerified=:verified", {
+            verified: true
+        }).andWhere("user.id is distinct from :id",{
+            id:requestedUserId
+        })
+
+        if (options.limit) {
+            builder.limit(options.limit);
+
+            if (options.page) {
+                const take = (options.page - 1) * options.limit;
+                builder.take(take);
+            }
+        }
+
+        return await builder.getManyAndCount()
     }
 }
 

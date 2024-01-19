@@ -16,7 +16,7 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | null | undefined>(getCookie(AUTH_COOKIE_NAME ?? "") ?? "");
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const toast = useCustomToast();
-    const { mutate, isPending} = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: getCurrentUserApi,
         onSuccess: (data) => {
             if (data.status === 200) {
@@ -28,8 +28,6 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
         }
     })
 
-
-
     useEffect(() => {
         if (!accessToken) {
             router.push("/")
@@ -40,7 +38,7 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
         }
     }, [accessToken]);
 
-    if(isPending){
+    if (isPending) {
         return <p>Loading....</p>
     }
     return (

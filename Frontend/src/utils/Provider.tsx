@@ -12,7 +12,7 @@ const Provider = ({ children }: React.PropsWithChildren) => {
     <QueryClientProvider client={queryClient}>
       <main>{children}</main>
       <Toaster />
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   );
 };

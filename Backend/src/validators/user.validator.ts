@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID } from "class-validator";
+import { IsEmail, IsNotEmpty, IsUUID } from "class-validator";
 
 class UserValidator{
     @IsNotEmpty()
@@ -6,4 +6,10 @@ class UserValidator{
     mediaId:string;
 }
 
-export {UserValidator}
+class FindUserForChatValidation{
+    @IsNotEmpty()
+    @IsEmail()
+    email:string;
+}
+
+export {UserValidator, FindUserForChatValidation}

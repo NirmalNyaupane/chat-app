@@ -31,7 +31,7 @@ class MessageController {
     })
 
     getMessage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { page, limit, name } = req.query;
+        const { page, limit} = req.query;
         const chatId = req.params.id;
         const userId = req.body.user.id;
         const chat = await chatService.findChatById(chatId);
